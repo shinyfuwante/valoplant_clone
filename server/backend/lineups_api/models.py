@@ -6,6 +6,9 @@ class Playbook(models.Model):
     agent = models.CharField(max_length=50)
     map_name = models.CharField(max_length=50)
     
+    def __str__(self):
+        return '[id: {}] {} playbook on {}'.format(self.id, self.agent, self.map_name)
+    
 
 class Lineup(models.Model):
     playbook = models.ForeignKey(Playbook, on_delete=models.CASCADE, related_name = 'lineups')
@@ -21,3 +24,5 @@ class Lineup(models.Model):
     is_attack_sided = models.BooleanField()
     notes = models.TextField(max_length=500)
     
+    def __str__(self):
+        return 'Lineup for {} [id: {}]'.format(self.playbook, self.playbook.id)
