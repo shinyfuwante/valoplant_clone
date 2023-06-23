@@ -67,13 +67,13 @@ export default function UploadLineUpForm() {
         type="file"
         name="standImg"
         id="standImg"
-        onChange={(e) => setStandImg(e.target.value)}
+        onChange={(e) => setStandImg(e.target.files[0])}
       />
       <input
         type="file"
         name="aimImg"
         id="aimImg"
-        onChange={(e) => setAimImg(e.target.value)}
+        onChange={(e) => setAimImg(e.target.files[0])}
       />
       <input
         type="number"

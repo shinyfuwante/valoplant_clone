@@ -25,4 +25,4 @@ class Lineup(models.Model):
     notes = models.TextField(max_length=500)
     
     def __str__(self):
-        return 'Lineup for {} [id: {}]'.format(self.playbook, self.playbook.id)
+        return 'Lineup for {} [id: {}]'.format(self.playbook, self.id)
