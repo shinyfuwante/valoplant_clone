@@ -14,6 +14,8 @@ def playbook_list(request):
         if (playbook_serializer.is_valid()):
             playbook_serializer.save()
             return Response(playbook_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(playbook_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     playbooks = Playbook.objects.all()
     serializer = PlaybookSerializer(playbooks, many=True)
     return Response(serializer.data)

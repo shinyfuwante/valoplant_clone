@@ -7,8 +7,9 @@ class LineupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlaybookSerializer(serializers.ModelSerializer):
-    lineups = LineupSerializer(many=True)
+    lineups = LineupSerializer(many=True, required=False)
     class Meta:
         model = Playbook
-        fields = '__all__'
+        fields = ('id', 'agent', 'map_name', 'lineups')
+        read_only_fields = ('lineups',)
         
