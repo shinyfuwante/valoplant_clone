@@ -7,8 +7,13 @@ from rest_framework.response import Response
 
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def playbook_list(request):
+    if request.method == "POST":
+        playbook_serializer = PlaybookSerializer(data=request.data)
+        if (playbook_serializer.is_valid()):
+            playbook_serializer.save()
+            return Response(playbook_serializer.data, status=status.HTTP_201_CREATED)
     playbooks = Playbook.objects.all()
     serializer = PlaybookSerializer(playbooks, many=True)
     return Response(serializer.data)
