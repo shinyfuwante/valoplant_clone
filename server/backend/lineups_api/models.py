@@ -5,9 +5,10 @@ from cloudinary.models import CloudinaryField
 class Playbook(models.Model):
     agent = models.CharField(max_length=50)
     map_name = models.CharField(max_length=50)
+    playbook_name = models.CharField(max_length=50)
     
     def __str__(self):
-        return '[id: {}] {} playbook on {}'.format(self.id, self.agent, self.map_name)
+        return '[id: {}] {}'.format(self.id, self.playbook_name)
     
 
 class Lineup(models.Model):
