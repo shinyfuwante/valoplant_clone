@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from lineups_api.serializers import PlaybookSerializer, LineupSerializer
-from lineups_api.models import Playbook, Lineup
+from lineups_api.serializers import PlaybookSerializer, LineupSerializer, MapSerializer
+from lineups_api.models import Playbook, Lineup, Map
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import requests
 
 
 # Create your views here.
@@ -37,3 +38,17 @@ def playbook_detail(request, pk):
         lineup_serializer.save(playbook=playbook)
         return Response(lineup_serializer.data, status=status.HTTP_201_CREATED)
     return Response(lineup_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def fetch_maps(request):
+    if request.method == "GET":
+        r = requests.get('https://valorant-api.com/v1/maps/')
+        for val_map in r.json()['data']:
+            existing_map = Map.objects.filter(display_name=val_map['displayName'])
+            if (existing_map.exists()): 
+                existing_map.update(display_icon = val_map['listViewIcon'], minimap=val_map['displayIcon'])
+            else:
+                map_entry = Map(display_name = val_map['displayName'], display_icon = val_map['listViewIcon'], minimap = val_map['displayIcon'])
+                map_entry.save()
+            
+    return Response(status=status.HTTP_200_OK)
