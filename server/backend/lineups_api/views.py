@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from lineups_api.serializers import PlaybookSerializer, LineupSerializer, MapSerializer
-from lineups_api.models import Playbook, Lineup, Map
+from lineups_api.models import Playbook, Lineup, Map, Agent
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -51,4 +51,19 @@ def fetch_maps(request):
                 map_entry = Map(display_name = val_map['displayName'], display_icon = val_map['listViewIcon'], minimap = val_map['displayIcon'])
                 map_entry.save()
             
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def fetch_agents(request):
+    if request.method == "GET":
+        r = requests.get('https://valorant-api.com/v1/agents')
+        for val_agent in r.json()['data']:
+            if val_agent['isPlayableCharacter'] != True:
+                continue
+            existing_agent = Agent.objects.filter(display_name=val_agent['displayName'])
+            if existing_agent.exists():
+                existing_agent.update(display_name=val_agent['displayName'], display_icon=val_agent['displayIcon'], abilities=val_agent['abilities'])
+            else:
+                val_agent = Agent(display_name=val_agent['displayName'], display_icon=val_agent['displayIcon'], abilities=val_agent['abilities'])
+                val_agent.save()
     return Response(status=status.HTTP_200_OK)

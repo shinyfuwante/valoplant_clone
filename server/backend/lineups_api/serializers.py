@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from lineups_api.models import Lineup, Playbook, Map
+from lineups_api.models import Lineup, Playbook, Map, Agent
 
 class LineupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,4 +16,9 @@ class PlaybookSerializer(serializers.ModelSerializer):
 class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Map
+        fields = '__all__'
+        
+class AgentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agent
         fields = '__all__'

@@ -37,11 +37,6 @@ class Agent(models.Model):
     uuid = models.CharField(max_length=100)
     display_name = models.CharField(max_length=20)
     display_icon = models.URLField()
-    
-class Ability(models.Model):
-    display_name = models.CharField(max_length=20)
-    display_icon = models.URLField()
-    slot = models.CharField(max_length=20)
-    agent = models.ForeignKey(Agent, on_delete=models.CASCADE, related_name = 'ability')
+    abilities = models.JSONField()
     
     
