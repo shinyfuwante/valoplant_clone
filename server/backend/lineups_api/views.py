@@ -24,20 +24,32 @@ def playbook_list(request):
 @api_view(['GET', 'POST'])
 def playbook_detail(request, pk):
     # playbook = Playbook.objects.prefetch_related('lineups').get(pk=pk)
-    playbook = Playbook.objects.get(pk=pk)
-    if request.method == "GET":
+    try:
         playbook = Playbook.objects.get(pk=pk)
-        print(playbook.lineups.all())
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == "GET":
         serializer = PlaybookSerializer(playbook)
         return Response(serializer.data)
     #request is POST
     print(request.data)
+    serializer = PlaybookSerializer(playbook, data=request.data)
+    if (serializer.is_valid()):
+        serializer.save(playbook=playbook)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['POST'])
+def upload_lineup(request, pk):
+    playbook = Playbook.objects.get(pk=pk)
     lineup_serializer = LineupSerializer(data=request.data)
     if (lineup_serializer.is_valid()):
         print('valid')
         lineup_serializer.save(playbook=playbook)
         return Response(lineup_serializer.data, status=status.HTTP_201_CREATED)
     return Response(lineup_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(['GET'])
 def fetch_maps(request):
