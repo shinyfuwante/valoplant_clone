@@ -14,7 +14,7 @@ class PlaybookSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Playbook
-        fields = ('id', 'playbook_name', 'agent', 'map_name', 'lineups', 'agent_image', 'agent_skills', 'map_image')
+        fields = ('id', 'playbook_name', 'agent', 'map_name', 'lineups', 'agent_image', 'agent_skills', 'map_image', 'minimap', 'map_name')
         read_only_fields = ('lineups',)
     
     def get_agent_image(self, obj):
@@ -29,6 +29,13 @@ class PlaybookSerializer(serializers.ModelSerializer):
         val_map = Map.objects.get(display_name=obj.map_name)
         return val_map.display_icon
     
+    def get_minimap(self, obj):
+        val_map = Map.objects.get(display_name=obj.map_name)
+        return val_map.minimap
+    
+    def get_map_name(self, obj):
+        val_map = Map.objects.get(display_name=obj.map_name)
+        return val_map.display_name
     
         
 
