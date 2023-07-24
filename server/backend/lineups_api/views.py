@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from lineups_api.serializers import PlaybookSerializer, LineupSerializer, MapSerializer
+from lineups_api.serializers import PlaybookSerializer, LineupSerializer, MapSerializer, AgentSerializer
 from lineups_api.models import Playbook, Lineup, Map, Agent
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -51,9 +51,9 @@ def upload_lineup(request, pk):
     return Response(lineup_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def fetch_maps(request):
-    if request.method == "GET":
+    if request.method == "POST":
         r = requests.get('https://valorant-api.com/v1/maps/')
         for val_map in r.json()['data']:
             existing_map = Map.objects.filter(display_name=val_map['displayName'])
@@ -62,12 +62,14 @@ def fetch_maps(request):
             else:
                 map_entry = Map(display_name = val_map['displayName'], display_icon = val_map['listViewIcon'], minimap = val_map['displayIcon'])
                 map_entry.save()
-            
-    return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+    maps = Map.objects.all()
+    serializer = MapSerializer(maps, many=True)
+    return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def fetch_agents(request):
-    if request.method == "GET":
+    if request.method == "POST":
         r = requests.get('https://valorant-api.com/v1/agents')
         for val_agent in r.json()['data']:
             if val_agent['isPlayableCharacter'] != True:
@@ -78,4 +80,7 @@ def fetch_agents(request):
             else:
                 val_agent = Agent(display_name=val_agent['displayName'], display_icon=val_agent['displayIcon'], abilities=val_agent['abilities'])
                 val_agent.save()
-    return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
+    agents = Agent.objects.all()
+    serializer = AgentSerializer(agents, many=True)
+    return Response(serializer.data)

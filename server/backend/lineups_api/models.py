@@ -4,6 +4,7 @@ from cloudinary.models import CloudinaryField
 # Create your models here.
 class Playbook(models.Model):
     agent = models.CharField(max_length=50)
+    # possibly need the skill images as well
     map_name = models.CharField(max_length=50)
     playbook_name = models.CharField(max_length=50)
     
