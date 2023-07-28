@@ -3,7 +3,7 @@ import "./App.css";
 import UploadLineUpForm from "./components/UploadLineUpForm";
 import UploadPlaybookForm from "./components/UploadPlayBookForm";
 import PlaybookCard from "./components/PlaybookCard/PlaybookCard";
-import PlaybookDetail from "./components/PlaybookDetail";
+import PlaybookDetail from "./components/PlaybookDetail/PlaybookDetail";
 
 export interface Playbook {
   agent: string;
@@ -13,6 +13,26 @@ export interface Playbook {
   id: number;
   map_image: string;
   minimap: string;
+  lineups: Lineup[];
+  agent_skills: Skill[];
+}
+
+export interface Lineup {
+  id: number;
+  dest_x: number;
+  dest_y: number;
+  source_x: number;
+  source_y: number;
+  stand_img: string;
+  aim_img: string;
+  skill_type: number;
+  is_attack_sided: boolean;
+  notes: string;
+}
+
+export interface Skill {
+  displayName: string
+  displayIcon: string
 }
 
 function App() {
