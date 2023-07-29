@@ -10,19 +10,21 @@ export default function PlaybookDetail({
   playbook: Playbook;
   returnBack: () => void;
 }) {
-  const agent_skills = playbook.agent_skills;
-  
+  const handleClickOnImage = (e) => {
+    // console.log(`x: ${e.nativeEvent.offsetX}`);
+    // console.log(`y: ${e.nativeEvent.offsetY}`);
+  }
   return (
     <>
       <button onClick={() => returnBack()}>X</button>
       <div className="playbook-image-container">
-        <img className="playbook-image" src={playbook.minimap}></img>
+        <img className="playbook-image" onClick = {(e) => handleClickOnImage(e)}src={playbook.minimap}></img>
         {playbook.lineups.map((lineup) => (
           <PlaybookItem
             key={lineup.id}
-            x={lineup.dest_x}
-            y={lineup.dest_y}
+            lineup = {lineup}
             display_icon={playbook.agent_skills[lineup.skill_type].displayIcon}
+            agent_icon ={playbook.agent_image}
           ></PlaybookItem>
         ))}
       </div>
