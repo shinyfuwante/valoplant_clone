@@ -31,14 +31,26 @@ export interface Lineup {
 }
 
 export interface Skill {
-  displayName: string
-  displayIcon: string
+  displayName: string;
+  displayIcon: string;
+}
+export interface ValMap {
+  display_name: string;
+  display_icon: string;
+  minimap: string;
+}
+export interface Agent {
+  display_name: string;
+  display_icon: string;
+  id: number;
 }
 
 function App() {
   const backendUrl = "http://127.0.0.1:8000/";
   const testing = false;
   const [data, setData] = useState<Playbook[]>();
+  const [availableAgents, setAvailableAgents] = useState<Agent[]>();
+  const [availableMaps, setAvailableMaps] = useState<ValMap[]>();
   const [selectedPlaybook, setSelectedPlaybook] = useState<Playbook | null>();
   let playbookCards;
 
@@ -57,16 +69,27 @@ function App() {
     const json = await response.json();
     setData(json);
   };
-
+  const getAvailableInfo = async () => {
+    const agentsResponse = await fetch(backendUrl + "fetch_agents/");
+    const agentsJson = await agentsResponse.json();
+    setAvailableAgents(agentsJson);
+    const mapsResponse = await fetch(backendUrl + "fetch_maps/");
+    const mapsJson = await mapsResponse.json();
+    setAvailableMaps(mapsJson);
+  };
   useEffect(() => {
     getPlaybooks();
+    getAvailableInfo();
   }, []);
 
   return (
     <>
       <>
         {selectedPlaybook ? (
-          <PlaybookDetail playbook={selectedPlaybook} returnBack={handleReturn}></PlaybookDetail>
+          <PlaybookDetail
+            playbook={selectedPlaybook}
+            returnBack={handleReturn}
+          ></PlaybookDetail>
         ) : (
           data && <>{playbookCards}</>
         )}
