@@ -1,10 +1,32 @@
 from rest_framework import serializers
 from lineups_api.models import Lineup, Playbook, Map, Agent
+from cloudinary import CloudinaryImage
 
 class LineupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lineup
         fields = '__all__'
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        
+        if 'stand_img' in data:
+            # Extract the Cloudinary public ID from the relative URL
+            public_id = data['stand_img'].split('/')[-1].split('.')[0]
+
+            # Construct the full Cloudinary URL using the public ID and Cloudinary settings
+            image_url = CloudinaryImage(public_id).build_url(secure=True)
+            data['stand_img'] = image_url
+        
+        if 'aim_img' in data:
+            # Extract the Cloudinary public ID from the relative URL
+            public_id = data['aim_img'].split('/')[-1].split('.')[0]
+
+            # Construct the full Cloudinary URL using the public ID and Cloudinary settings
+            image_url = CloudinaryImage(public_id).build_url(secure=True)
+            data['aim_img'] = image_url
+
+        return data
 
 class PlaybookSerializer(serializers.ModelSerializer):
     lineups = LineupSerializer(many=True, required=False)

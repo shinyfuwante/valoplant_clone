@@ -29,7 +29,7 @@ def playbook_detail(request, pk):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == "GET":
-        serializer = PlaybookSerializer(playbook)
+        serializer = PlaybookSerializer(playbook, context={'request': request})
         return Response(serializer.data)
     #request is POST
     print(request.data)
