@@ -47,7 +47,7 @@ export interface Agent {
 
 function App() {
   const backendUrl = "http://127.0.0.1:8000/";
-  const testing = false;
+  const testing = true;
   const [data, setData] = useState<Playbook[]>();
   const [availableAgents, setAvailableAgents] = useState<Agent[]>();
   const [availableMaps, setAvailableMaps] = useState<ValMap[]>();
@@ -95,12 +95,12 @@ function App() {
         )}
       </>
       <>
-        {testing ? (
+        {testing && availableAgents && availableMaps ? (
           <>
-            <UploadPlaybookForm />
+            <UploadPlaybookForm availableMaps={availableMaps} availableAgents={availableAgents}/>
             <br></br>
             -------------------
-            <UploadLineUpForm />{" "}
+            {/* <UploadLineUpForm />{" "} */}
           </>
         ) : (
           <></>

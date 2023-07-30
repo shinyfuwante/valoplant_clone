@@ -1,0 +1,25 @@
+img.agent-selector-image {
+    width: 45px;
+    height: auto;
+}
+
+.agent-selector-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75px;
+    height: auto;
+}
+
+.agent-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 2px;
+}
+
+.agent-selector-name {
+    font-size: 10pt;
+}
